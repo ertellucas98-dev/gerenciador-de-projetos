@@ -7,11 +7,9 @@ import com.br.gerenciadorprojetos.domain.repository.MembroRepository;
 import com.br.gerenciadorprojetos.domain.repository.ProjetoRepository;
 import com.br.gerenciadorprojetos.dto.ProjetoRequestDto;
 import com.br.gerenciadorprojetos.dto.ProjetoResponseDto;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -37,9 +35,9 @@ class ProjetoServiceTest {
     @InjectMocks
     private ProjetoService projetoService;
 
-    @BeforeEach
-    void setUp() {
-        // save retorna o próprio projeto com id preenchido
+    @Test
+    @DisplayName("Deve calcular risco BAIXO para orçamento até 100k e prazo até 3 meses")
+    void deveCalcularRiscoBaixo() {
         when(projetoRepository.save(any(Projeto.class))).thenAnswer(invocation -> {
             Projeto p = invocation.getArgument(0, Projeto.class);
             if (p.getId() == null) {
@@ -47,11 +45,6 @@ class ProjetoServiceTest {
             }
             return p;
         });
-    }
-
-    @Test
-    @DisplayName("Deve calcular risco BAIXO para orçamento até 100k e prazo até 3 meses")
-    void deveCalcularRiscoBaixo() {
         ProjetoRequestDto dto = new ProjetoRequestDto();
         dto.setNome("Projeto A");
         dto.setDataInicio(LocalDate.of(2025, 1, 1));
@@ -67,6 +60,13 @@ class ProjetoServiceTest {
     @Test
     @DisplayName("Deve calcular risco MEDIO para orçamento entre 100001 e 500000")
     void deveCalcularRiscoMedioPorOrcamento() {
+        when(projetoRepository.save(any(Projeto.class))).thenAnswer(invocation -> {
+            Projeto p = invocation.getArgument(0, Projeto.class);
+            if (p.getId() == null) {
+                p.setId(1L);
+            }
+            return p;
+        });
         ProjetoRequestDto dto = new ProjetoRequestDto();
         dto.setNome("Projeto B");
         dto.setDataInicio(LocalDate.of(2025, 1, 1));
@@ -81,6 +81,13 @@ class ProjetoServiceTest {
     @Test
     @DisplayName("Deve calcular risco MEDIO para prazo entre 3 e 6 meses")
     void deveCalcularRiscoMedioPorPrazo() {
+        when(projetoRepository.save(any(Projeto.class))).thenAnswer(invocation -> {
+            Projeto p = invocation.getArgument(0, Projeto.class);
+            if (p.getId() == null) {
+                p.setId(1L);
+            }
+            return p;
+        });
         ProjetoRequestDto dto = new ProjetoRequestDto();
         dto.setNome("Projeto C");
         dto.setDataInicio(LocalDate.of(2025, 1, 1));
@@ -95,6 +102,13 @@ class ProjetoServiceTest {
     @Test
     @DisplayName("Deve calcular risco ALTO para orçamento acima de 500000")
     void deveCalcularRiscoAltoPorOrcamento() {
+        when(projetoRepository.save(any(Projeto.class))).thenAnswer(invocation -> {
+            Projeto p = invocation.getArgument(0, Projeto.class);
+            if (p.getId() == null) {
+                p.setId(1L);
+            }
+            return p;
+        });
         ProjetoRequestDto dto = new ProjetoRequestDto();
         dto.setNome("Projeto D");
         dto.setDataInicio(LocalDate.of(2025, 1, 1));
@@ -109,6 +123,13 @@ class ProjetoServiceTest {
     @Test
     @DisplayName("Deve calcular risco ALTO para prazo superior a 6 meses")
     void deveCalcularRiscoAltoPorPrazo() {
+        when(projetoRepository.save(any(Projeto.class))).thenAnswer(invocation -> {
+            Projeto p = invocation.getArgument(0, Projeto.class);
+            if (p.getId() == null) {
+                p.setId(1L);
+            }
+            return p;
+        });
         ProjetoRequestDto dto = new ProjetoRequestDto();
         dto.setNome("Projeto E");
         dto.setDataInicio(LocalDate.of(2025, 1, 1));
