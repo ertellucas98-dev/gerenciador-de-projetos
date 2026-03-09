@@ -89,7 +89,8 @@ class AlocacaoMembroServiceTest {
         when(projetoRepository.findById(1L)).thenReturn(Optional.of(projeto));
         when(membroRepository.findById(10L)).thenReturn(Optional.of(membro));
         when(projetoMembroRepository.countByProjetoId(1L)).thenReturn(5L);
-        when(projetoMembroRepository.contarProjetosAtivosPorMembro(10L, ProjetoStatus.ENCERRADO, ProjetoStatus.CANCELADO))
+        when(projetoMembroRepository.contarProjetosAtivosPorMembro(10L, ProjetoStatus.ENCERRADO,
+                ProjetoStatus.CANCELADO))
                 .thenReturn(3L);
 
         assertThatThrownBy(() -> alocacaoMembroService.alocarMembro(1L, 10L, null))
@@ -114,7 +115,8 @@ class AlocacaoMembroServiceTest {
         when(projetoRepository.findById(1L)).thenReturn(Optional.of(projeto));
         when(membroRepository.findById(10L)).thenReturn(Optional.of(membro));
         when(projetoMembroRepository.countByProjetoId(1L)).thenReturn(5L);
-        when(projetoMembroRepository.contarProjetosAtivosPorMembro(10L, ProjetoStatus.ENCERRADO, ProjetoStatus.CANCELADO))
+        when(projetoMembroRepository.contarProjetosAtivosPorMembro(10L, ProjetoStatus.ENCERRADO,
+                ProjetoStatus.CANCELADO))
                 .thenReturn(1L);
         when(projetoMembroRepository.findByProjetoIdAndMembroId(1L, 10L)).thenReturn(Optional.of(existente));
 
