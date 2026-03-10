@@ -1,5 +1,6 @@
 package com.br.gerenciadorprojetos.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -20,8 +21,9 @@ public class OpenApiConfig {
                         .description("API REST para gerenciamento de projetos, membros e alocações")
                         .version("1.0.0"))
                 .addSecurityItem(new SecurityRequirement().addList(schemeName))
-                .schemaRequirement(schemeName, new SecurityScheme()
-                        .type(SecurityScheme.Type.HTTP)
-                        .scheme("basic"));
+                .components(new Components()
+                        .addSecuritySchemes(schemeName, new SecurityScheme()
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("basic")));
     }
 }
