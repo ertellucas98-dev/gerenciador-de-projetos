@@ -1,5 +1,8 @@
 package com.br.gerenciadorprojetos.dto;
 
+import com.br.gerenciadorprojetos.domain.enums.ProjetoStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -12,6 +15,11 @@ public class ProjetoRequestDto {
     private BigDecimal orcamentoTotal;
     private String descricao;
     private Long gerenteId;
+
+    @Schema(description = "Status do projeto", example = "EM_ANALISE", allowableValues = { "EM_ANALISE",
+            "ANALISE_REALIZADA", "ANALISE_APROVADA",
+            "INICIADO", "PLANEJADO", "EM_ANDAMENTO", "ENCERRADO", "CANCELADO" })
+    private ProjetoStatus status;
 
     public String getNome() {
         return nome;
@@ -67,5 +75,13 @@ public class ProjetoRequestDto {
 
     public void setGerenteId(Long gerenteId) {
         this.gerenteId = gerenteId;
+    }
+
+    public ProjetoStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProjetoStatus status) {
+        this.status = status;
     }
 }
