@@ -1,8 +1,12 @@
 package com.br.gerenciadorprojetos.controller;
 
+import com.br.gerenciadorprojetos.domain.enums.ProjetoStatus;
 import com.br.gerenciadorprojetos.dto.ProjetoRequestDto;
 import com.br.gerenciadorprojetos.dto.ProjetoResponseDto;
 import com.br.gerenciadorprojetos.service.ProjetoService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +43,11 @@ public class ProjetoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProjetoResponseDto>> listarTodos() {
-        List<ProjetoResponseDto> projetos = projetoService.listarTodos();
+    public ResponseEntity<Page<ProjetoResponseDto>> listar(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) ProjetoStatus status,
+            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        Page<ProjetoResponseDto> projetos = projetoService.listarPaginado(nome, status, pageable);
         return ResponseEntity.ok(projetos);
     }
 

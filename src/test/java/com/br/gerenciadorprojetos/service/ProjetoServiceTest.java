@@ -168,6 +168,6 @@ class ProjetoServiceTest {
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("não podem ser excluídos");
 
-        verify(projetoRepository, never()).delete(any());
+        verify(projetoRepository, never()).delete(any(Projeto.class));
     }
 }

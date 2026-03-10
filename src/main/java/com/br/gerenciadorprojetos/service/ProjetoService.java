@@ -6,8 +6,12 @@ import com.br.gerenciadorprojetos.domain.enums.ProjetoRisco;
 import com.br.gerenciadorprojetos.domain.enums.ProjetoStatus;
 import com.br.gerenciadorprojetos.domain.repository.MembroRepository;
 import com.br.gerenciadorprojetos.domain.repository.ProjetoRepository;
+import com.br.gerenciadorprojetos.domain.specification.ProjetoSpecification;
 import com.br.gerenciadorprojetos.dto.ProjetoRequestDto;
 import com.br.gerenciadorprojetos.dto.ProjetoResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +66,15 @@ public class ProjetoService {
                 .stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProjetoResponseDto> listarPaginado(String nome, ProjetoStatus status, Pageable pageable) {
+        Specification<Projeto> spec = Specification
+                .where(ProjetoSpecification.nomeContem(nome))
+                .and(ProjetoSpecification.statusIgual(status));
+
+        return projetoRepository.findAll(spec, pageable).map(this::toResponse);
     }
 
     public void excluir(Long id) {
