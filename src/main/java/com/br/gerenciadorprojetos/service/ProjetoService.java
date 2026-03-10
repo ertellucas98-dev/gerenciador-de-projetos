@@ -91,6 +91,22 @@ public class ProjetoService {
         projetoRepository.delete(projeto);
     }
 
+    public ProjetoResponseDto alterarStatus(Long id, ProjetoStatus novoStatus) {
+        Projeto projeto = projetoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Projeto não encontrado"));
+
+        ProjetoStatus statusAtual = projeto.getStatus();
+        if (!statusAtual.podeTransicionarPara(novoStatus)) {
+            throw new IllegalStateException(
+                    "Transição de status inválida: " + statusAtual + " \u2192 " + novoStatus
+                            + ". Transições permitidas: " + statusAtual.proximosStatusPermitidos());
+        }
+
+        projeto.setStatus(novoStatus);
+        Projeto salvo = projetoRepository.save(projeto);
+        return toResponse(salvo);
+    }
+
     private void aplicarDadosBasicos(ProjetoRequestDto dto, Projeto projeto) {
         projeto.setNome(dto.getNome());
         projeto.setDataInicio(dto.getDataInicio());

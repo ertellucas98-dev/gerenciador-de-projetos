@@ -170,4 +170,62 @@ class ProjetoServiceTest {
 
         verify(projetoRepository, never()).delete(any(Projeto.class));
     }
+
+    @Test
+    @DisplayName("Deve permitir transição EM_ANALISE \u2192 ANALISE_REALIZADA")
+    void devePermitirTransicaoValida() {
+        Projeto projeto = new Projeto();
+        projeto.setId(1L);
+        projeto.setStatus(ProjetoStatus.EM_ANALISE);
+
+        when(projetoRepository.findById(1L)).thenReturn(Optional.of(projeto));
+        when(projetoRepository.save(any(Projeto.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        ProjetoResponseDto response = projetoService.alterarStatus(1L, ProjetoStatus.ANALISE_REALIZADA);
+
+        assertThat(response.getStatus()).isEqualTo(ProjetoStatus.ANALISE_REALIZADA);
+    }
+
+    @Test
+    @DisplayName("Deve permitir cancelar projeto em qualquer status ativo")
+    void devePermitirCancelarProjeto() {
+        Projeto projeto = new Projeto();
+        projeto.setId(2L);
+        projeto.setStatus(ProjetoStatus.EM_ANDAMENTO);
+
+        when(projetoRepository.findById(2L)).thenReturn(Optional.of(projeto));
+        when(projetoRepository.save(any(Projeto.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        ProjetoResponseDto response = projetoService.alterarStatus(2L, ProjetoStatus.CANCELADO);
+
+        assertThat(response.getStatus()).isEqualTo(ProjetoStatus.CANCELADO);
+    }
+
+    @Test
+    @DisplayName("Deve bloquear pular etapas: EM_ANALISE \u2192 EM_ANDAMENTO")
+    void deveBloquearPularEtapas() {
+        Projeto projeto = new Projeto();
+        projeto.setId(3L);
+        projeto.setStatus(ProjetoStatus.EM_ANALISE);
+
+        when(projetoRepository.findById(3L)).thenReturn(Optional.of(projeto));
+
+        assertThatThrownBy(() -> projetoService.alterarStatus(3L, ProjetoStatus.EM_ANDAMENTO))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Transi\u00e7\u00e3o de status inv\u00e1lida");
+    }
+
+    @Test
+    @DisplayName("Deve bloquear transi\u00e7\u00e3o a partir de ENCERRADO")
+    void deveBloquearTransicaoDeEncerrado() {
+        Projeto projeto = new Projeto();
+        projeto.setId(4L);
+        projeto.setStatus(ProjetoStatus.ENCERRADO);
+
+        when(projetoRepository.findById(4L)).thenReturn(Optional.of(projeto));
+
+        assertThatThrownBy(() -> projetoService.alterarStatus(4L, ProjetoStatus.CANCELADO))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Transi\u00e7\u00e3o de status inv\u00e1lida");
+    }
 }

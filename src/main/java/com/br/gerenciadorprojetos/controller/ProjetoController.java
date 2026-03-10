@@ -56,4 +56,11 @@ public class ProjetoController {
         projetoService.excluir(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ProjetoResponseDto> alterarStatus(@PathVariable Long id,
+            @RequestParam ProjetoStatus novoStatus) {
+        ProjetoResponseDto atualizado = projetoService.alterarStatus(id, novoStatus);
+        return ResponseEntity.ok(atualizado);
+    }
 }
