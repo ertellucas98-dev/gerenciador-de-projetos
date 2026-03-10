@@ -10,23 +10,23 @@ import java.util.List;
 
 public interface ProjetoRepository extends JpaRepository<Projeto, Long> {
 
-	@Query("select p.status as status, count(p) as quantidade, coalesce(sum(p.orcamentoTotal), 0) as totalOrcado " +
-		   "from Projeto p group by p.status")
-	List<StatusResumoView> resumoPorStatus();
+    @Query("select p.status as status, count(p) as quantidade, coalesce(sum(p.orcamentoTotal), 0) as totalOrcado " +
+            "from Projeto p group by p.status")
+    List<StatusResumoView> resumoPorStatus();
 
-	@Query("select avg(datediff(day, p.dataInicio, p.dataTerminoReal)) from Projeto p " +
-		   "where p.status = com.br.gerenciadorprojetos.domain.enums.ProjetoStatus.ENCERRADO " +
-		   "and p.dataTerminoReal is not null")
-	Double mediaDiasProjetosEncerrados();
+    @Query("select avg(datediff(day, p.dataInicio, p.dataTerminoReal)) from Projeto p " +
+            "where p.status = com.br.gerenciadorprojetos.domain.enums.ProjetoStatus.ENCERRADO " +
+            "and p.dataTerminoReal is not null")
+    Double mediaDiasProjetosEncerrados();
 
-	@Query("select count(distinct pm.membro.id) from ProjetoMembro pm")
-	Long totalMembrosUnicosAlocados();
+    @Query("select count(distinct pm.membro.id) from ProjetoMembro pm")
+    Long totalMembrosUnicosAlocados();
 
-	interface StatusResumoView {
-		ProjetoStatus getStatus();
+    interface StatusResumoView {
+        ProjetoStatus getStatus();
 
-		Long getQuantidade();
+        Long getQuantidade();
 
-		BigDecimal getTotalOrcado();
-	}
+        BigDecimal getTotalOrcado();
+    }
 }

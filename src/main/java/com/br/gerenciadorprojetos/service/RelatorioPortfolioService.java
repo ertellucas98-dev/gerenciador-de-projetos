@@ -17,7 +17,7 @@ public class RelatorioPortfolioService {
     private final ProjetoRepository projetoRepository;
 
     public RelatorioPortfolioService(ProjetoRepository projetoRepository,
-                                     ProjetoMembroRepository projetoMembroRepository) {
+            ProjetoMembroRepository projetoMembroRepository) {
         this.projetoRepository = projetoRepository;
     }
 
