@@ -4,6 +4,7 @@ import com.br.gerenciadorprojetos.domain.enums.ProjetoStatus;
 import com.br.gerenciadorprojetos.dto.ProjetoRequestDto;
 import com.br.gerenciadorprojetos.dto.ProjetoResponseDto;
 import com.br.gerenciadorprojetos.service.ProjetoService;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -46,7 +47,7 @@ public class ProjetoController {
     public ResponseEntity<Page<ProjetoResponseDto>> listar(
             @RequestParam(required = false) String nome,
             @RequestParam(required = false) ProjetoStatus status,
-            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+            @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable) {
         Page<ProjetoResponseDto> projetos = projetoService.listarPaginado(nome, status, pageable);
         return ResponseEntity.ok(projetos);
     }
