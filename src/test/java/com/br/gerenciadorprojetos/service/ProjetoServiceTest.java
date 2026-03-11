@@ -172,7 +172,7 @@ class ProjetoServiceTest {
     }
 
     @Test
-    @DisplayName("Deve permitir transição EM_ANALISE \u2192 ANALISE_REALIZADA")
+    @DisplayName("Deve permitir transição EM_ANALISE ANALISE_REALIZADA")
     void devePermitirTransicaoValida() {
         Projeto projeto = new Projeto();
         projeto.setId(1L);
